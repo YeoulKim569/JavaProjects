@@ -4,6 +4,11 @@ import java.awt.*;
 import javax.swing.*;
 
 public class CurrencyUI extends JFrame {
+	private String inputCurrency;
+	private double inputAmount;
+	
+	private String outputCurrency;
+	private double outputAmount;
 
     // Input fields
     private JTextField inputCurrencyName;
@@ -13,8 +18,13 @@ public class CurrencyUI extends JFrame {
     private JTextField outputCurrencyName;
     private JTextField outputCurrencyValue;
 
-    public CurrencyUI() {
-        setTitle("Currency Converter UI");
+    public CurrencyUI(String inputCurrencyName, String outputCurrencyName, double inputCurrencyValue, double outputCurrencyValue) {
+    	inputCurrency = inputCurrencyName;
+        inputAmount = inputCurrencyValue;
+        outputCurrency = outputCurrencyName;
+        outputAmount = outputCurrencyValue;
+        
+    	setTitle("Currency Converter UI");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -25,7 +35,8 @@ public class CurrencyUI extends JFrame {
         // Panels
         add(createImagePanel(), BorderLayout.WEST);
         add(createInputPanel(), BorderLayout.CENTER);
-        add(createOutputPanel(), BorderLayout.EAST);
+        add(createOutputPanel(), BorderLayout.EAST);     
+        
     }
 
     // Panel 1: Image Panel
@@ -48,6 +59,9 @@ public class CurrencyUI extends JFrame {
 
         inputCurrencyName = new JTextField();
         inputCurrencyValue = new JTextField();
+        
+        inputCurrencyName.setText(inputCurrency);
+        inputCurrencyValue.setText(String.valueOf(inputAmount));
 
         panel.add(new JLabel("Currency Name:"));
         panel.add(inputCurrencyName);
@@ -64,6 +78,9 @@ public class CurrencyUI extends JFrame {
 
         outputCurrencyName = new JTextField();
         outputCurrencyValue = new JTextField();
+        
+        outputCurrencyName.setText(outputCurrency);
+        outputCurrencyValue.setText(String.valueOf(outputAmount));
 
         outputCurrencyName.setEditable(false);
         outputCurrencyValue.setEditable(false);
@@ -78,7 +95,8 @@ public class CurrencyUI extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new CurrencyUI().setVisible(true);
+            new CurrencyUI("PHP", "USD", 1000, 17).setVisible(true);
         });
+        
     }
 }
