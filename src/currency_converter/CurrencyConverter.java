@@ -1,4 +1,4 @@
-package main;
+package currency_converter;
 
 public class CurrencyConverter {
 	String inputCurrency;

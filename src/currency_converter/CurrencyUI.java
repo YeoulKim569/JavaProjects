@@ -1,4 +1,4 @@
-package main;
+package currency_converter;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

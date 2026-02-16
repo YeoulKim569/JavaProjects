@@ -1,4 +1,4 @@
-package todoListApplication;
+package todo_list_application;
 
 public class Main {
 

@@ -1,4 +1,4 @@
-package main;
+package currency_converter;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
