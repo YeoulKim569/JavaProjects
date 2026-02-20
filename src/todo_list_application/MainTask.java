@@ -11,7 +11,7 @@ public class MainTask {
 	Date deadline;
 	String description;
 	boolean starred;
-	ArrayList<String> subTask;
+	ArrayList<SubTask> subTask; 
 	
 	public MainTask(String title, String date, String deadline, String description, boolean starred) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -21,7 +21,7 @@ public class MainTask {
 		this.deadline = sdf.parse(deadline);
 		this.description = description;
 		this.starred = starred;
-		this.subTask = new ArrayList<String>();
+		this.subTask = new ArrayList<SubTask>();
 	}
 	
 	public String toString() {

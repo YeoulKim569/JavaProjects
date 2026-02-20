@@ -4,14 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Subtask {
+public class SubTask {
 	String title;
 	Date date;
 	Date deadline;
 	String description;
 	boolean starred;
 	
-	public Subtask(String title, String date, String deadline, String description, boolean starred) throws ParseException {
+	public SubTask(String title, String date, String deadline, String description, boolean starred) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
 		this.title = title;
