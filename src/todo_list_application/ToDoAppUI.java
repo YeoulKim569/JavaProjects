@@ -4,63 +4,79 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 public class ToDoAppUI extends JFrame {
 
-    private ToDoList toDoList;
-
-    private DefaultListModel<String> taskListModel;
-    private JList<String> taskJList;
-
-    private JButton addTaskButton;
-    private JButton viewTaskButton;
+    private ArrayList<ToDoList> lists;
+    private JTabbedPane tabbedPane;
+    private JButton createListButton;
 
     public ToDoAppUI() {
-        toDoList = new ToDoList("My Tasks");
+        lists = new ArrayList<>();
 
-        setTitle("To-Do List Application");
-        setSize(600, 400);
-        setLocationRelativeTo(null); // center window
+        setTitle("To-Do Application");
+        setSize(700, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         initializeComponents();
         layoutComponents();
-        registerListeners();
+
+        // Create default ToDoList
+        createNewToDoList("Default List");
     }
 
     private void initializeComponents() {
-        taskListModel = new DefaultListModel<>();
-        taskJList = new JList<>(taskListModel);
-
-        addTaskButton = new JButton("Add Main Task");
-        viewTaskButton = new JButton("View Selected Task");
+        tabbedPane = new JTabbedPane();
+        createListButton = new JButton("Create New ToDo List");
     }
 
     private void layoutComponents() {
         setLayout(new BorderLayout());
 
-        JScrollPane scrollPane = new JScrollPane(taskJList);
-        add(scrollPane, BorderLayout.CENTER);
+        add(tabbedPane, BorderLayout.CENTER);
+        add(createListButton, BorderLayout.SOUTH);
 
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.add(addTaskButton);
-        bottomPanel.add(viewTaskButton);
+        createListButton.addActionListener((ActionEvent e) -> {
+            String name = JOptionPane.showInputDialog(
+                    this,
+                    "Enter new list name:"
+            );
 
-        add(bottomPanel, BorderLayout.SOUTH);
-    }
-
-    private void registerListeners() {
-
-        addTaskButton.addActionListener((ActionEvent e) -> {
-            addMainTask();
-        });
-
-        viewTaskButton.addActionListener((ActionEvent e) -> {
-            viewSelectedTask();
+            if (name != null && !name.trim().isEmpty()) {
+                createNewToDoList(name);
+            }
         });
     }
 
-    private void addMainTask() {
+    private void createNewToDoList(String title) {
+
+        ToDoList list = new ToDoList(title);
+        lists.add(list);
+
+        // Panel for this specific ToDoList
+        JPanel panel = new JPanel(new BorderLayout());
+
+        DefaultListModel<String> taskModel = new DefaultListModel<>();
+        JList<String> taskListUI = new JList<>(taskModel);
+
+        JButton addTaskButton = new JButton("Add Main Task");
+        JButton viewTaskButton = new JButton("View Selected Task");
+
+        panel.add(new JScrollPane(taskListUI), BorderLayout.CENTER);
+        panel.add(addTaskButton, BorderLayout.SOUTH);
+        panel.add(viewTaskButton, BorderLayout.NORTH);
+
+        // Add task ONLY to this ToDoList
+        addTaskButton.addActionListener(e -> {
+            addMainTaskToList(list, taskModel);
+        });
+
+        tabbedPane.addTab(title, panel);
+    }
+
+    private void addMainTaskToList(ToDoList list, DefaultListModel<String> taskModel) {
 
         JTextField titleField = new JTextField();
         JTextField dateField = new JTextField("dd/MM/yyyy HH:mm");
@@ -70,8 +86,8 @@ public class ToDoAppUI extends JFrame {
 
         Object[] message = {
                 "Title:", titleField,
-                "Start Date:", dateField,
-                "Deadline:", deadlineField,
+                "Start Date (optional):", dateField,
+                "Deadline (optional):", deadlineField,
                 "Description:", descriptionField,
                 starredBox
         };
@@ -93,32 +109,15 @@ public class ToDoAppUI extends JFrame {
                         starredBox.isSelected()
                 );
 
-                toDoList.mainTask.add(task);
-                taskListModel.addElement(task.title);
+                list.mainTask.add(task);   // Add to correct ToDoList
+                taskModel.addElement(task.title); // Update UI
 
             } catch (ParseException ex) {
                 JOptionPane.showMessageDialog(this,
-                        "Invalid date format!",
+                        "Invalid date format.",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
-
-    private void viewSelectedTask() {
-        int index = taskJList.getSelectedIndex();
-
-        if (index == -1) {
-            JOptionPane.showMessageDialog(this,
-                    "Please select a task first.");
-            return;
-        }
-
-        MainTask task = toDoList.mainTask.get(index);
-
-        JOptionPane.showMessageDialog(this,
-                task.toString(),
-                "Task Details",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 }
