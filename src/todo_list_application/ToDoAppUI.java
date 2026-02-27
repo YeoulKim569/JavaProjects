@@ -61,14 +61,26 @@ public class ToDoAppUI extends JFrame {
 
         DefaultListModel<String> taskModel = new DefaultListModel<>();
         JList<String> taskListUI = new JList<>(taskModel);
+        addDefaultMainTask(list, taskModel);
 
         JButton addTaskButton = new JButton("Add Main Task");
         JButton viewTaskButton = new JButton("View Selected Task");
 
         panel.add(new JScrollPane(taskListUI), BorderLayout.CENTER);
-        panel.add(addTaskButton, BorderLayout.SOUTH);
-        panel.add(viewTaskButton, BorderLayout.NORTH);
+        
+        // Create bottom panel
+        JPanel bottomPanel = new JPanel();
 
+        // Choose layout for bottom panel
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        // You could also use new GridLayout(1, 3)
+
+        bottomPanel.add(addTaskButton);
+        bottomPanel.add(viewTaskButton);
+        // Add third component here if needed
+
+        panel.add(bottomPanel, BorderLayout.SOUTH);
+        
         // Add task ONLY to this ToDoList
         addTaskButton.addActionListener(e -> {
             addMainTaskToList(list, taskModel);
@@ -120,5 +132,24 @@ public class ToDoAppUI extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+    
+    public void addDefaultMainTask(ToDoList list, DefaultListModel<String> taskModel) {  	 		
+		try {
+			MainTask defaultTask = new MainTask(
+			         "Default Task",
+			         "17/02/2026 08:28",
+			         "17/02/2026 08:28",
+			         "default desciption",
+			         false
+			 );
+			
+			list.mainTask.add(defaultTask);   // Add to correct ToDoList
+	        taskModel.addElement(defaultTask.title); // Update UI
+	        
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
     }
 }
