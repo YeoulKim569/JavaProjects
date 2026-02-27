@@ -24,7 +24,8 @@ public class ToDoAppUI extends JFrame {
         layoutComponents();
 
         // Create default ToDoList
-        createNewToDoList("Default List");
+        createNewToDoList("Study");
+        createNewToDoList("Hobby");
     }
 
     private void initializeComponents() {
