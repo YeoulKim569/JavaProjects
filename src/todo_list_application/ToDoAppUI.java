@@ -85,8 +85,38 @@ public class ToDoAppUI extends JFrame {
         addTaskButton.addActionListener(e -> {
             addMainTaskToList(list, taskModel);
         });
-
+        
+        viewTaskButton.addActionListener(e -> {
+           displaySelectedTask(list, taskListUI);
+        });
+        
         tabbedPane.addTab(title, panel);
+    }
+    
+    private void displaySelectedTask(ToDoList list, JList<String> taskListUI) {
+    	 int selectedIndex = taskListUI.getSelectedIndex();
+
+         if (selectedIndex != -1) {
+             MainTask selectedTask = list.mainTask.get(selectedIndex);
+
+             JOptionPane.showMessageDialog(
+                     this,
+                     "Title: " + selectedTask.title +
+                     "\nStart: " + selectedTask.date +
+                     "\nDeadline: " + selectedTask.deadline +
+                     "\nDescription: " + selectedTask.description +
+                     "\nStarred: " + selectedTask.starred,
+                     "Task Details",
+                     JOptionPane.INFORMATION_MESSAGE
+             );
+         } else {
+             JOptionPane.showMessageDialog(
+                     this,
+                     "Please select a task first.",
+                     "No Selection",
+                     JOptionPane.WARNING_MESSAGE
+             );
+         }
     }
 
     private void addMainTaskToList(ToDoList list, DefaultListModel<String> taskModel) {
