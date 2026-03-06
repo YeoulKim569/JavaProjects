@@ -3,6 +3,8 @@ package todo_list_application;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -13,7 +15,7 @@ public class ToDoAppUI extends JFrame {
     private JButton createListButton;
 
     public ToDoAppUI() {
-        lists = new ArrayList<>();
+        lists = DataStorage.loadData();
 
         setTitle("To-Do Application");
         setSize(700, 500);
@@ -24,8 +26,14 @@ public class ToDoAppUI extends JFrame {
         layoutComponents();
 
         // Create default ToDoList
-        createNewToDoList("Study");
-        createNewToDoList("Hobby");
+        //createNewToDoList("Study");
+        //createNewToDoList("Hobby");
+        
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                DataStorage.saveData(lists);
+            }
+        });
     }
 
     private void initializeComponents() {

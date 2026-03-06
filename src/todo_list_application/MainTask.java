@@ -1,11 +1,12 @@
 package todo_list_application;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainTask {
+public class MainTask implements Serializable {
 	String title;
 	Date date;
 	Date deadline;
