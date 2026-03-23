@@ -25,6 +25,11 @@ public class ToDoAppUI extends JFrame {
         initializeComponents();
         layoutComponents();
 
+        if (lists.isEmpty()) {
+            ToDoList defaultList = new ToDoList("My Tasks");
+            lists.add(defaultList);
+        }
+        
         // Create default ToDoList
         //createNewToDoList("Study");
         //createNewToDoList("Hobby");
@@ -73,7 +78,7 @@ public class ToDoAppUI extends JFrame {
 
         DefaultListModel<String> taskModel = new DefaultListModel<>();
         JList<String> taskListUI = new JList<>(taskModel);
-        addDefaultMainTask(list, taskModel);
+        loadMainTasksIntoUI(list, taskModel);
 
         JButton addTaskButton = new JButton("Add Main Task");
         JButton viewTaskButton = new JButton("View Selected Task");
@@ -106,6 +111,13 @@ public class ToDoAppUI extends JFrame {
     }
     //*********************************************************
     
+    private void loadMainTasksIntoUI(ToDoList list, DefaultListModel<String> taskModel) {
+    	taskModel.clear();
+    	for(MainTask mainTask:list.mainTask) {
+    		taskModel.addElement(mainTask.title);
+    	}
+    }
+    
     private void createNewToDoList(String title) {
 
         ToDoList list = new ToDoList(title);
@@ -116,7 +128,9 @@ public class ToDoAppUI extends JFrame {
 
         DefaultListModel<String> taskModel = new DefaultListModel<>();
         JList<String> taskListUI = new JList<>(taskModel);
-        addDefaultMainTask(list, taskModel);
+        if (list.mainTask.isEmpty()) {
+            addDefaultMainTask(list, taskModel);
+        }
 
         JButton addTaskButton = new JButton("Add Main Task");
         JButton viewTaskButton = new JButton("View Selected Task");
