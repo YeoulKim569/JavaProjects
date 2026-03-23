@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ToDoList implements Serializable {
-	String title;
+	public String title;
 	ArrayList<MainTask> mainTask;
 	
 	public ToDoList(String title) {

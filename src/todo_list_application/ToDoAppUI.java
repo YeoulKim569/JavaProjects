@@ -1,4 +1,4 @@
-package todo_list_application;
+ package todo_list_application;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +29,12 @@ public class ToDoAppUI extends JFrame {
         //createNewToDoList("Study");
         //createNewToDoList("Hobby");
         
+        //******************************
+        for(ToDoList list:lists) {
+        	displaySavedToDoList(list);
+        }
+        //******************************
+        
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 DataStorage.saveData(lists);
@@ -58,7 +64,48 @@ public class ToDoAppUI extends JFrame {
             }
         });
     }
+    
+    //*******************************************************************
+    private void displaySavedToDoList(ToDoList list) {
 
+        // Panel for this specific ToDoList
+        JPanel panel = new JPanel(new BorderLayout());
+
+        DefaultListModel<String> taskModel = new DefaultListModel<>();
+        JList<String> taskListUI = new JList<>(taskModel);
+        addDefaultMainTask(list, taskModel);
+
+        JButton addTaskButton = new JButton("Add Main Task");
+        JButton viewTaskButton = new JButton("View Selected Task");
+
+        panel.add(new JScrollPane(taskListUI), BorderLayout.CENTER);
+        
+        // Create bottom panel
+        JPanel bottomPanel = new JPanel();
+
+        // Choose layout for bottom panel
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        // You could also use new GridLayout(1, 3)
+
+        bottomPanel.add(addTaskButton);
+        bottomPanel.add(viewTaskButton);
+        // Add third component here if needed
+
+        panel.add(bottomPanel, BorderLayout.SOUTH);
+        
+        // Add task ONLY to this ToDoList
+        addTaskButton.addActionListener(e -> {
+            addMainTaskToList(list, taskModel);
+        });
+        
+        viewTaskButton.addActionListener(e -> {
+           displaySelectedTask(list, taskListUI);
+        });
+        
+        tabbedPane.addTab(list.title, panel);
+    }
+    //*********************************************************
+    
     private void createNewToDoList(String title) {
 
         ToDoList list = new ToDoList(title);
