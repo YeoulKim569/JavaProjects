@@ -82,6 +82,8 @@ public class ToDoAppUI extends JFrame {
 
         JButton addTaskButton = new JButton("Add Main Task");
         JButton viewTaskButton = new JButton("View Selected Task");
+        JButton viewSubTaskButton = new JButton("View SubTasks");
+       
 
         panel.add(new JScrollPane(taskListUI), BorderLayout.CENTER);
         
@@ -94,6 +96,7 @@ public class ToDoAppUI extends JFrame {
 
         bottomPanel.add(addTaskButton);
         bottomPanel.add(viewTaskButton);
+        bottomPanel.add(viewSubTaskButton);
         // Add third component here if needed
 
         panel.add(bottomPanel, BorderLayout.SOUTH);
@@ -134,6 +137,7 @@ public class ToDoAppUI extends JFrame {
 
         JButton addTaskButton = new JButton("Add Main Task");
         JButton viewTaskButton = new JButton("View Selected Task");
+        JButton viewSubTaskButton = new JButton("View Selected SubTask");
 
         panel.add(new JScrollPane(taskListUI), BorderLayout.CENTER);
         
@@ -146,6 +150,7 @@ public class ToDoAppUI extends JFrame {
 
         bottomPanel.add(addTaskButton);
         bottomPanel.add(viewTaskButton);
+        bottomPanel.add(viewSubTaskButton);
         // Add third component here if needed
 
         panel.add(bottomPanel, BorderLayout.SOUTH);
@@ -154,12 +159,53 @@ public class ToDoAppUI extends JFrame {
         addTaskButton.addActionListener(e -> {
             addMainTaskToList(list, taskModel);
         });
-        
-        viewTaskButton.addActionListener(e -> {
-           displaySelectedTask(list, taskListUI);
+               
+        viewSubTaskButton.addActionListener(e -> {
+            int selectedIndex = taskListUI.getSelectedIndex();
+
+            if (selectedIndex != -1) {
+                MainTask selectedTask = list.mainTask.get(selectedIndex);
+                openSubTaskWindow(selectedTask);
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Please select a main task first.",
+                        "No Selection",
+                        JOptionPane.WARNING_MESSAGE
+                );
+            }
         });
         
         tabbedPane.addTab(title, panel);
+    }
+    
+    private void openSubTaskWindow(MainTask mainTask) {
+
+        JFrame subTaskFrame = new JFrame("SubTasks - " + mainTask.title);
+        subTaskFrame.setSize(400, 300);
+        subTaskFrame.setLocationRelativeTo(this);
+
+        DefaultListModel<String> subTaskModel = new DefaultListModel<>();
+        JList<String> subTaskListUI = new JList<>(subTaskModel);
+
+        // Load existing subtasks
+        for (SubTask sub : mainTask.subTask) {
+            subTaskModel.addElement(sub.title);
+        }
+
+        JButton addSubTaskButton = new JButton("Add SubTask");
+
+        subTaskFrame.setLayout(new BorderLayout());
+        subTaskFrame.add(new JScrollPane(subTaskListUI), BorderLayout.CENTER);
+        subTaskFrame.add(addSubTaskButton, BorderLayout.SOUTH);
+
+        // Add SubTask logic
+        addSubTaskButton.addActionListener(e -> {
+        	System.out.println("Hello");
+            //addSubTask(mainTask, subTaskModel);
+        });
+
+        subTaskFrame.setVisible(true);
     }
     
     private void displaySelectedTask(ToDoList list, JList<String> taskListUI) {
